@@ -102,7 +102,7 @@ endif
 path-to-referenced-charts:
 	@echo "resources/function-controller"
 
-$(eval $(call buildpack-cp-ro,resolve)) 
+$(eval $(call buildpack-mount,resolve)) 
 $(eval $(call buildpack-mount,mod-verify)) 
 $(eval $(call buildpack-mount,test))
 $(eval $(call buildpack-mount,controller-gen))
