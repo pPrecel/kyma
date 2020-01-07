@@ -3,7 +3,7 @@ PKG = github.com/kyma-project/kyma/components/function-controller
 # Image URL to use all building/pushing image targets
 APP_NAME = function-controller
 APP_PATH = components/$(APP_NAME)
-BUILDPACK = eu.gcr.io/kyma-project/test-infra/buildpack-golang:go1.13
+BUILDPACK = eu.gcr.io/kyma-project/test-infra/buildpack-golang-kubebuilder:v20190208-813daef
 SCRIPTS_DIR = $(realpath $(shell pwd)/../..)/common/makefiles
 
 
