@@ -14,11 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO change this
-// Generate deepcopy for apis
-//go:generate go run ../../vendor/k8s.io/code-generator/cmd/deepcopy-gen/main.go -O zz_generated.deepcopy -i ./... -h ../../hack/boilerplate.go.txt
-
-// Package apis contains Kubernetes API groups.
+// Package api contains Kubernetes API groups.
 package api
 
 import (
