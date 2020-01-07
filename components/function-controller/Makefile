@@ -41,11 +41,6 @@ dep-status-local:
 mod-verify-local:
 	GO111MODULE=on go mod verify 
 
-
-$(eval $(call buildpack-cp-ro,resolve)) 
-$(eval $(call buildpack-mount,mod-verify)) 
-$(eval $(call buildpack-mount,test))
-
 # Run tests
 test: export KUBEBUILDER_CONTROLPLANE_START_TIMEOUT = 2m
 test: export KUBEBUILDER_CONTROLPLANE_STOP_TIMEOUT = 2m
@@ -103,3 +98,8 @@ endif
 .PHONY: path-to-referenced-charts
 path-to-referenced-charts:
 	@echo "resources/function-controller"
+
+$(eval $(call buildpack-cp-ro,resolve)) 
+$(eval $(call buildpack-mount,mod-verify)) 
+$(eval $(call buildpack-mount,test))
+$(eval $(call buildpack-mount,controller-gen))
