@@ -4,11 +4,13 @@ PKG = github.com/kyma-project/kyma/components/function-controller
 APP_NAME = function-controller
 APP_PATH = components/$(APP_NAME)
 BUILDPACK = eu.gcr.io/kyma-project/test-infra/buildpack-golang:go1.13
-SCRIPTS_DIR = ../../common/makefiles
+SCRIPTS_DIR = $(realpath $(shell pwd)/../..)/common/makefiles
 
-# COMPONENT_DIR is a local path to component
+
+override ENTRYPOINT := ./main.go
+
 include $(SCRIPTS_DIR)/generic-make-go.mk
-ENTRYPOINT := ./main.go
+
 
 # Image URL to use all building/pushing image targets
 IMG ?= $(APP_NAME):latest
