@@ -24,7 +24,7 @@ else
 GOBIN=$(shell go env GOBIN)
 endif
 
-verify:: mod-verify errcheck
+verify:: mod-verify test
 
 resolve-local:
 	GO111MODULE=on go mod download
@@ -44,11 +44,11 @@ mod-verify-local:
 # Run tests
 test: export KUBEBUILDER_CONTROLPLANE_START_TIMEOUT = 2m
 test: export KUBEBUILDER_CONTROLPLANE_STOP_TIMEOUT = 2m
-test: generate verify manifests
+test: generate manifests
 	GO111MODULE=on go test ./... -coverprofile cover.out
 
 # Install CRDs into a cluster
-install: manifests
+install: manifests-local
 	kustomize build config/crd | kubectl apply -f -
 
 # Uninstall CRDs from a cluster
@@ -62,24 +62,24 @@ undeploy: uninstall removewebhook
 	kustomize build config/default | ko delete  -f -
 
 # Deploy controller in the configured Kubernetes cluster in ~/.kube/config
-deploy: manifests
+deploy: manifests-local
 	cd config/manager && kustomize edit set image controller=${IMG}
 	kustomize build config/default | kubectl apply -f -
 
 # Generate manifests e.g. CRD, RBAC etc.
-.PHONY: manifests
-manifests: controller-gen
+.PHONY: manifests-local
+manifests: controller-gen-local
 	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 
 
 # Generate code
-.PHONY: generate
-generate: controller-gen
+.PHONY: generate-local
+generate: controller-gen-local
 	$(CONTROLLER_GEN) object:headerFile=./hack/boilerplate.go.txt paths="./..."
 
 # find or download controller-gen
 # download controller-gen if necessary
-.PHONY: controller-gen
+.PHONY: controller-gen-local
 controller-gen:
 ifeq (, $(shell which controller-gen))
 	@{ \
@@ -101,7 +101,6 @@ path-to-referenced-charts:
 
 $(eval $(call buildpack-mount,resolve)) 
 $(eval $(call buildpack-mount,mod-verify)) 
-$(eval $(call buildpack-mount,test))
-$(eval $(call buildpack-mount,controller-gen))
-$(eval $(call buildpack-mount,generate))
-$(eval $(call buildpack-mount,manifests))
+# $(eval $(call buildpack-mount,controller-gen))
+# $(eval $(call buildpack-mount,generate))
+# $(eval $(call buildpack-mount,manifests))
