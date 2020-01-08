@@ -22,7 +22,7 @@ import (
 	servingv1alpha1 "knative.dev/serving/pkg/apis/serving/v1alpha1"
 	servingv1beta1 "knative.dev/serving/pkg/apis/serving/v1beta1"
 
-	serverlessv1alpha1 "github.com/kyma-project/kyma/components/function-controller/api/v1alpha1"
+	serverlessv1alpha1 "github.com/kyma-project/kyma/components/function-controller/pkg/apis/serverless/v1alpha1"
 )
 
 // GetServiceSpec gets ServiceSpec for a function

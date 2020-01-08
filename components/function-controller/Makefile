@@ -26,9 +26,6 @@ endif
 
 verify:: mod-verify errcheck
 
-generate:
-	@echo "Nothing no generate - ommiting."
-
 resolve-local:
 	GO111MODULE=on go mod download
 

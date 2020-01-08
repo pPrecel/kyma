@@ -20,6 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	stdlog "log"
 	"os"
 	"reflect"
 	"testing"
@@ -31,7 +32,7 @@ import (
 )
 
 // TODO please do not hardcode paths like this FFS
-const fixtureKsvcPath = "../test/fixtures/ksvc.json"
+const fixtureKsvcPath = "../../test/fixtures/ksvc.json"
 
 var fixtureKsvc *servingv1alpha1.Service
 
@@ -40,7 +41,7 @@ func TestMain(m *testing.M) {
 
 	fixtureKsvc, err = loadFixtureKsvc()
 	if err != nil {
-		os.Exit(1)
+		stdlog.Fatal("while reading ksvc.json:", err)
 	}
 
 	os.Exit(m.Run())

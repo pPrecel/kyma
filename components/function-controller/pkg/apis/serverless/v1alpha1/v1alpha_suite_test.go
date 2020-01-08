@@ -33,7 +33,7 @@ var cfg *rest.Config
 var c client.Client
 
 func TestMain(m *testing.M) {
-	crdBases := filepath.Join("..", "..", "config", "crd", "bases")
+	crdBases := filepath.Join("..", "..", "..", "..", "config", "crd", "bases")
 	test.FileExists(crdBases)
 	t := &envtest.Environment{
 		CRDDirectoryPaths: []string{crdBases},

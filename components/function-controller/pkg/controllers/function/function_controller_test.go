@@ -41,7 +41,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	serverlessv1alpha1 "github.com/kyma-project/kyma/components/function-controller/api/v1alpha1"
+	serverlessv1alpha1 "github.com/kyma-project/kyma/components/function-controller/pkg/apis/serverless/v1alpha1"
 )
 
 var c client.Client
@@ -359,6 +359,11 @@ func TestFunctionConditionNewFunction(t *testing.T) {
 	objectName := "test-condition-new-function"
 	mgr, err := manager.New(cfg, manager.Options{})
 	g.Expect(err).NotTo(gm.HaveOccurred())
+	stopMgr, mgrStopped := StartTestManager(mgr, g)
+	defer func() {
+		close(stopMgr)
+		mgrStopped.Wait()
+	}()
 	c := mgr.GetClient()
 
 	function := &serverlessv1alpha1.Function{
