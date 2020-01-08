@@ -25,8 +25,10 @@ require (
 	github.com/openzipkin/zipkin-go v0.2.2 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/tektoncd/pipeline v0.7.0
+	golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550 // indirect
 	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553
 	golang.org/x/sys v0.0.0-20191010194322-b09406accb47 // indirect
+	golang.org/x/xerrors v0.0.0-20191011141410-1b5146add898 // indirect
 	google.golang.org/grpc v1.24.0 // indirect
 	k8s.io/api v0.17.0
 	k8s.io/apimachinery v0.17.0
