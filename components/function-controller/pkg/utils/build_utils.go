@@ -22,7 +22,7 @@ import (
 	"time"
 
 	"github.com/gogo/protobuf/proto"
-	serverlessv1alpha1 "github.com/kyma-project/kyma/components/function-controller/api/v1alpha1"
+	serverlessv1alpha1 "github.com/kyma-project/kyma/components/function-controller/pkg/apis/serverless/v1alpha1"
 	tektonv1alpha1 "github.com/tektoncd/pipeline/pkg/apis/pipeline/v1alpha1"
 
 	corev1 "k8s.io/api/core/v1"

@@ -19,10 +19,11 @@ import (
 	"flag"
 	"os"
 
-	"github.com/kyma-project/kyma/components/function-controller/api"
-	serverlessv1alpha1 "github.com/kyma-project/kyma/components/function-controller/api/v1alpha1"
-	"github.com/kyma-project/kyma/components/function-controller/controllers"
-	"github.com/kyma-project/kyma/components/function-controller/webhook"
+	"github.com/kyma-project/kyma/components/function-controller/pkg/apis"
+	serverlessv1alpha1 "github.com/kyma-project/kyma/components/function-controller/pkg/apis/serverless/v1alpha1"
+	"github.com/kyma-project/kyma/components/function-controller/pkg/controllers"
+	"github.com/kyma-project/kyma/components/function-controller/pkg/webhook"
+
 	tektonv1alpha1 "github.com/tektoncd/pipeline/pkg/apis/pipeline/v1alpha1"
 	"k8s.io/apimachinery/pkg/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
@@ -76,7 +77,7 @@ func main() {
 
 	setupLog.Info("Registering custom resources")
 	schemeSetupFns := []func(*runtime.Scheme) error{
-		api.AddToScheme,
+		apis.AddToScheme,
 		servingv1alpha1.AddToScheme,
 		tektonv1alpha1.AddToScheme,
 	}
@@ -95,7 +96,7 @@ func main() {
 	}
 
 	setupLog.Info("Adding webhooks to the manager")
-	if err := webhook.AddToManager(mgr); err != nil {
+	if err := (&webhook.FunctionHandler{}).SetupWebhookWithManager(mgr); err != nil {
 		setupLog.Error(err, "Unable to add webhooks to the manager")
 		os.Exit(1)
 	}

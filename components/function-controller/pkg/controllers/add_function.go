@@ -14,15 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package mutating
+package controllers
 
 import (
-	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+	"github.com/kyma-project/kyma/components/function-controller/pkg/controllers/function"
 )
 
-var (
-	// Builders contain admission webhook builders
-	// Builders = map[string]*builder.WebhookBuilder{}
-	// HandlerMap contains admission webhook handlers
-	HandlerMap = map[string][]admission.Handler{}
-)
+func init() {
+	// AddToManagerFuncs is a list of functions to create controllers and add them to a manager.
+	AddToManagerFuncs = append(AddToManagerFuncs, function.Add)
+}

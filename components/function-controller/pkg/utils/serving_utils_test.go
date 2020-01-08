@@ -17,11 +17,12 @@ limitations under the License.
 package utils
 
 import (
+	"testing"
+
 	"github.com/ghodss/yaml"
-	serverlessv1alpha1 "github.com/kyma-project/kyma/components/function-controller/api/v1alpha1"
+	serverlessv1alpha1 "github.com/kyma-project/kyma/components/function-controller/pkg/apis/serverless/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"testing"
 )
 
 func TestGetServiceSpec(t *testing.T) {
@@ -86,6 +87,7 @@ func TestGetServiceSpec(t *testing.T) {
 	if !compareEnv(t, expectedEnv, serviceSpec.ConfigurationSpec.Template.Spec.RevisionSpec.PodSpec.Containers[0].Env) {
 		expectedEnvStr, err := getString(expectedEnv)
 		gotEnvStr, err := getString(expectedEnv)
+		// TODO discuss: this looks like a bug
 		t.Fatalf("Expected value in Env: %v Got: %v", expectedEnvStr, gotEnvStr)
 		if err != nil {
 			t.Fatalf("Error while unmarshaling expectedBuildSpec: %v", err)
