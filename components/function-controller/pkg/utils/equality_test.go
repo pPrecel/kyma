@@ -31,7 +31,6 @@ import (
 	servingv1alpha1 "knative.dev/serving/pkg/apis/serving/v1alpha1"
 )
 
-// TODO please do not hardcode paths like this FFS
 const fixtureKsvcPath = "../../test/fixtures/ksvc.json"
 
 var fixtureKsvc *servingv1alpha1.Service

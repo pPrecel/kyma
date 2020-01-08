@@ -14,12 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package utils
+package utils_test
 
 import (
 	"testing"
 
 	"github.com/onsi/gomega"
+
+	"github.com/kyma-project/kyma/components/function-controller/pkg/utils"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -40,7 +42,7 @@ func TestNewRuntimeInfo(t *testing.T) {
 			"funcSizes":          "[]",
 		},
 	}
-	ri, err := New(cm)
+	ri, err := utils.New(cm)
 	g.Expect(err).NotTo(gomega.HaveOccurred())
 	g.Expect(ri.ServiceAccount).To(gomega.Equal("test"))
 	g.Expect(ri.RegistryInfo).To(gomega.Equal("foo"))
@@ -50,7 +52,7 @@ func TestNewRuntimeInfo(t *testing.T) {
 			"serviceAccountName": "test",
 		},
 	}
-	_, err = New(cmMissing)
+	_, err = utils.New(cmMissing)
 	g.Expect(err.Error()).To(gomega.ContainSubstring("missing mandatory attributes in ConfigMap data"))
 
 	cmBroken := &corev1.ConfigMap{
@@ -63,6 +65,6 @@ func TestNewRuntimeInfo(t *testing.T) {
 			"funcSizes":          "[]",
 		},
 	}
-	_, err = New(cmBroken)
+	_, err = utils.New(cmBroken)
 	g.Expect(err.Error()).To(gomega.ContainSubstring("error unmarshaling JSON"))
 }
