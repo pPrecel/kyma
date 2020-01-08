@@ -8,6 +8,6 @@ import (
 
 type FunctionHandler struct {
 	v1alpha1.Function
-	Client client.Client
+	Client      client.Client
 	RuntimeInfo runtimeUtil.RuntimeInfo
 }
