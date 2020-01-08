@@ -23,7 +23,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o manager github.com/kyma
 #
 # Copy the controller-manager into a thin image
 #
-FROM alpine:3.10
+FROM alpine:3.11
 LABEL source=git@github.com:kyma-project/kyma.git
 WORKDIR /
 #
