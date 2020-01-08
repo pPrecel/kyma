@@ -36,10 +36,10 @@ func TestStorageFunction(t *testing.T) {
 			Namespace: "default",
 		}}
 	g := gomega.NewGomegaWithT(t)
-	d := c
+
 	// Test Create
 	fetched := &Function{}
-	g.Expect(d.Create(context.TODO(), created)).NotTo(gomega.HaveOccurred())
+	g.Expect(c.Create(context.TODO(), created)).NotTo(gomega.HaveOccurred())
 
 	g.Expect(c.Get(context.TODO(), key, fetched)).NotTo(gomega.HaveOccurred())
 	g.Expect(fetched).To(gomega.Equal(created))
