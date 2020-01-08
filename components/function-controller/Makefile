@@ -45,7 +45,9 @@ mod-verify-local:
 test: export KUBEBUILDER_CONTROLPLANE_START_TIMEOUT = 2m
 test: export KUBEBUILDER_CONTROLPLANE_STOP_TIMEOUT = 2m
 test: generate manifests
-	GO111MODULE=on go test ./... -coverprofile cover.out
+	go test -coverprofile=/tmp/artifacts/cover.out ./...
+	@echo -n "Total coverage: "
+	@go tool cover -func=/tmp/artifacts/cover.out | grep total | awk '{print $$3}'
 
 # Install CRDs into a cluster
 install: manifests
@@ -104,3 +106,4 @@ $(eval $(call buildpack-mount,mod-verify))
 $(eval $(call buildpack-mount,controller-gen))
 $(eval $(call buildpack-mount,generate))
 $(eval $(call buildpack-mount,manifests))
+$(eval $(call buildpack-mount,test))
