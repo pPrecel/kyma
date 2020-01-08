@@ -3,7 +3,7 @@ PKG = github.com/kyma-project/kyma/components/function-controller
 # Image URL to use all building/pushing image targets
 APP_NAME = function-controller
 APP_PATH = components/$(APP_NAME)
-BUILDPACK = eu.gcr.io/kyma-project/test-infra/buildpack-golang-kubebuilder:v20190208-813daef
+BUILDPACK = eu.gcr.io/kyma-project/test-infra/buildpack-golang-toolbox:v20191011-51ed45a
 SCRIPTS_DIR = $(realpath $(shell pwd)/../..)/common/makefiles
 
 
@@ -28,7 +28,7 @@ verify:: mod-verify test
 
 resolve-local:
 	GO111MODULE=on go mod download
-	go mod vendor
+	GO111MODULE=on go mod vendor
 
 ensure-local:
 	@echo "Go modules present in component - omitting."
@@ -46,7 +46,7 @@ mod-verify-local:
 test: export KUBEBUILDER_CONTROLPLANE_START_TIMEOUT = 2m
 test: export KUBEBUILDER_CONTROLPLANE_STOP_TIMEOUT = 2m
 test: generate manifests
-	go test -v -coverprofile=/tmp/artifacts/cover.out -mod vendor ./...
+	GO111MODULE=on go test -v -coverprofile=/tmp/artifacts/cover.out -mod vendor ./...
 	@echo -n "Total coverage: "
 	@go tool cover -func=/tmp/artifacts/cover.out | grep total | awk '{print $$3}'
 
