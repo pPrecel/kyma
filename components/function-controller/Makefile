@@ -28,6 +28,7 @@ verify:: mod-verify test
 
 resolve-local:
 	GO111MODULE=on go mod download
+	go mod vendor
 
 ensure-local:
 	@echo "Go modules present in component - omitting."
@@ -45,7 +46,7 @@ mod-verify-local:
 test: export KUBEBUILDER_CONTROLPLANE_START_TIMEOUT = 2m
 test: export KUBEBUILDER_CONTROLPLANE_STOP_TIMEOUT = 2m
 test: generate manifests
-	go test -coverprofile=/tmp/artifacts/cover.out ./...
+	go test -v -coverprofile=/tmp/artifacts/cover.out -mod vendor ./...
 	@echo -n "Total coverage: "
 	@go tool cover -func=/tmp/artifacts/cover.out | grep total | awk '{print $$3}'
 
