@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package utils
+package utils_test
 
 import (
 	"testing"
 
 	"github.com/ghodss/yaml"
 	serverlessv1alpha1 "github.com/kyma-project/kyma/components/function-controller/pkg/apis/serverless/v1alpha1"
+	"github.com/kyma-project/kyma/components/function-controller/pkg/utils"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -39,16 +40,16 @@ func TestGetServiceSpec(t *testing.T) {
 		},
 	}
 
-	rnInfo := &RuntimeInfo{
+	rnInfo := &utils.RuntimeInfo{
 		RegistryInfo: "test",
-		AvailableRuntimes: []RuntimesSupported{
+		AvailableRuntimes: []utils.RuntimesSupported{
 			{
 				ID:             "nodejs8",
 				DockerfileName: "testnodejs8",
 			},
 		},
 	}
-	serviceSpec := GetServiceSpec(imageName, fn, rnInfo)
+	serviceSpec := utils.GetServiceSpec(imageName, fn, rnInfo)
 
 	// Testing ConfigurationSpec
 	if serviceSpec.ConfigurationSpec.Template.Spec.RevisionSpec.PodSpec.Containers[0].Image != "foo-image" {
@@ -87,8 +88,8 @@ func TestGetServiceSpec(t *testing.T) {
 	if !compareEnv(t, expectedEnv, serviceSpec.ConfigurationSpec.Template.Spec.RevisionSpec.PodSpec.Containers[0].Env) {
 		expectedEnvStr, err := getString(expectedEnv)
 		gotEnvStr, err := getString(expectedEnv)
-		// TODO discuss: this looks like a bug
 		t.Fatalf("Expected value in Env: %v Got: %v", expectedEnvStr, gotEnvStr)
+		// TODO discuss: this looks like a bug
 		if err != nil {
 			t.Fatalf("Error while unmarshaling expectedBuildSpec: %v", err)
 		}
@@ -96,7 +97,6 @@ func TestGetServiceSpec(t *testing.T) {
 }
 
 func compareEnv(t *testing.T, source, dest []corev1.EnvVar) bool {
-	t.Helper()
 	for i, _ := range source {
 		found := false
 		for j, _ := range dest {
