@@ -24,7 +24,7 @@ else
 GOBIN=$(shell go env GOBIN)
 endif
 
-verify:: mod-verify-local
+verify:: mod-verify test 
 
 resolve-local:
 	GO111MODULE=on go mod download
@@ -97,9 +97,6 @@ else
 CONTROLLER_GEN=$(shell which controller-gen)
 endif
 
-.PHONY: controller-gen-local
-controller-gen-local: controller-gen
-
 .PHONY: path-to-referenced-charts
 path-to-referenced-charts:
 	@echo "resources/function-controller"
@@ -107,6 +104,5 @@ path-to-referenced-charts:
 $(eval $(call buildpack-mount,resolve)) 
 $(eval $(call buildpack-mount,mod-verify))
 $(eval $(call buildpack-mount,controller-gen))
-$(eval $(call buildpack-mount,manifests))
 $(eval $(call buildpack-mount,generate))
 $(eval $(call buildpack-mount,test))
