@@ -132,6 +132,7 @@ func getEnvDefault(envName, defaultValue string) string {
 // +kubebuilder:rbac:groups="serving.knative.dev",resources=services;routes;configurations;revisions,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups="build.knative.dev",resources=builds;buildtemplates;clusterbuildtemplates;services,verbs=get;list;create;update;delete;patch;watch
 // +kubebuilder:rbac:groups="tekton.dev",resources=tasks;taskruns,verbs=get;list;watch;create;update;patch;delete
+
 func (r *ReconcileFunction) Reconcile(req reconcile.Request) (reconcile.Result, error) {
 	// Get Function instance
 	fn, err := r.getFunctionInstance(req)
