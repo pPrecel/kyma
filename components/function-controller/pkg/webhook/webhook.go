@@ -35,7 +35,7 @@ func getEnvDefault(envName string, defaultValue string) string {
 
 func (r *FunctionHandler) SetupWebhookWithManager(mgr ctrl.Manager) error {
 	var err error
-	rntInfo, err := getRuntimeInfo(r.Client, fnConfigName, fnConfigNamespace)
+	rntInfo, err := getRuntimeInfo(mgr.GetClient(), fnConfigName, fnConfigNamespace)
 	if err != nil {
 		return err
 	}
