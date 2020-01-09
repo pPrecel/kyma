@@ -24,7 +24,7 @@ else
 GOBIN=$(shell go env GOBIN)
 endif
 
-verify:: mod-verify test
+verify:: mod-verify test 
 
 resolve-local:
 	GO111MODULE=on go mod download
@@ -70,19 +70,18 @@ deploy: manifests
 	kustomize build config/default | kubectl apply -f -
 
 # Generate manifests e.g. CRD, RBAC etc.
-.PHONY: manifests-local
+.PHONY: manifests
 manifests: controller-gen
 	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 
-
 # Generate code
-.PHONY: generate-local
+.PHONY: generate
 generate: controller-gen
 	$(CONTROLLER_GEN) object:headerFile=./hack/boilerplate.go.txt paths="./..."
 
 # find or download controller-gen
 # download controller-gen if necessary
-.PHONY: controller-gen-local
+.PHONY: controller-gen
 controller-gen:
 ifeq (, $(shell which controller-gen))
 	@{ \
@@ -106,5 +105,4 @@ $(eval $(call buildpack-mount,resolve))
 $(eval $(call buildpack-mount,mod-verify))
 $(eval $(call buildpack-mount,controller-gen))
 $(eval $(call buildpack-mount,generate))
-$(eval $(call buildpack-mount,manifests))
 $(eval $(call buildpack-mount,test))
