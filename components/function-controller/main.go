@@ -23,7 +23,6 @@ import (
 	serverlessv1alpha1 "github.com/kyma-project/kyma/components/function-controller/pkg/apis/serverless/v1alpha1"
 	"github.com/kyma-project/kyma/components/function-controller/pkg/controllers"
 	"github.com/kyma-project/kyma/components/function-controller/pkg/webhook"
-
 	tektonv1alpha1 "github.com/tektoncd/pipeline/pkg/apis/pipeline/v1alpha1"
 	"k8s.io/apimachinery/pkg/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
@@ -59,7 +58,7 @@ func main() {
 	flag.Parse()
 
 	ctrl.SetLogger(zap.New(func(o *zap.Options) {
-		o.Development = true
+		o.Development = devLog
 	}))
 	setupLog.Info("Generating Kubernetes client config")
 	cfg, err := config.GetConfig()
@@ -95,15 +94,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	setupLog.Info("Adding webhooks to the manager")
-	if err := (&webhook.FunctionHandler{}).SetupWebhookWithManager(mgr); err != nil {
-		setupLog.Error(err, "Unable to add webhooks to the manager")
-		os.Exit(1)
-	}
-
 	setupLog.Info("Running manager")
 	if err := mgr.Start(ctrl.SetupSignalHandler()); err != nil {
 		setupLog.Error(err, "Unable to run the manager")
+		os.Exit(1)
+	}
+
+	setupLog.Info("Adding webhooks to the manager")
+	if err := (&webhook.FunctionHandler{}).SetupWebhookWithManager(mgr); err != nil {
+		setupLog.Error(err, "Unable to add webhooks to the manager")
 		os.Exit(1)
 	}
 }
