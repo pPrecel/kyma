@@ -97,6 +97,9 @@ else
 CONTROLLER_GEN=$(shell which controller-gen)
 endif
 
+.PHONY: controller-gen-local
+controller-gen-local: controller-gen
+
 .PHONY: path-to-referenced-charts
 path-to-referenced-charts:
 	@echo "resources/function-controller"
@@ -104,6 +107,6 @@ path-to-referenced-charts:
 $(eval $(call buildpack-mount,resolve)) 
 $(eval $(call buildpack-mount,mod-verify))
 $(eval $(call buildpack-mount,controller-gen))
-$(eval $(call buildpack-mount,manifest))
+$(eval $(call buildpack-mount,manifests))
 $(eval $(call buildpack-mount,generate))
 $(eval $(call buildpack-mount,test))
