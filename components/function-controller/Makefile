@@ -24,7 +24,7 @@ else
 GOBIN=$(shell go env GOBIN)
 endif
 
-verify:: mod-verify test 
+verify:: mod-verify 
 
 resolve-local:
 	GO111MODULE=on go mod download
@@ -43,9 +43,9 @@ mod-verify-local:
 	GO111MODULE=on go mod verify 
 
 # Run tests
-test: export KUBEBUILDER_CONTROLPLANE_START_TIMEOUT = 2m
-test: export KUBEBUILDER_CONTROLPLANE_STOP_TIMEOUT = 2m
-test: generate manifests
+test-local: export KUBEBUILDER_CONTROLPLANE_START_TIMEOUT = 2m
+test-local: export KUBEBUILDER_CONTROLPLANE_STOP_TIMEOUT = 2m
+test-local: generate manifests
 	GO111MODULE=on go test -v -coverprofile=/tmp/artifacts/cover.out -mod vendor ./...
 	@echo -n "Total coverage: "
 	@go tool cover -func=/tmp/artifacts/cover.out | grep total | awk '{print $$3}'
