@@ -8,6 +8,7 @@ require (
 	github.com/Azure/azure-sdk-for-go v19.1.1+incompatible // indirect
 	github.com/Azure/go-autorest/autorest/to v0.3.0 // indirect
 	github.com/Azure/go-autorest/autorest/validation v0.2.0 // indirect
+	github.com/appscode/jsonpatch v2.0.1+incompatible // indirect
 	github.com/containerd/containerd v1.3.0 // indirect
 	github.com/docker/distribution v2.6.0-rc.1.0.20180327202408-83389a148052+incompatible // indirect
 	github.com/docker/docker v1.4.2-0.20190924003213-a8608b5b67c7 // indirect
@@ -15,6 +16,7 @@ require (
 	github.com/docker/go-units v0.4.0 // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/gogo/protobuf v1.3.1
+	github.com/gomodules/jsonpatch v2.0.1+incompatible // indirect
 	github.com/google/go-containerregistry v0.0.0-20190320210540-8d4083db9aa0 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/mattbaird/jsonpatch v0.0.0-20171005235357-81af80346b1a // indirect
@@ -29,6 +31,7 @@ require (
 	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553
 	golang.org/x/sys v0.0.0-20191010194322-b09406accb47 // indirect
 	golang.org/x/xerrors v0.0.0-20191011141410-1b5146add898 // indirect
+	gomodules.xyz/jsonpatch/v2 v2.0.1
 	google.golang.org/grpc v1.24.0 // indirect
 	k8s.io/api v0.17.0
 	k8s.io/apimachinery v0.17.0

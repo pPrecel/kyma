@@ -22,7 +22,6 @@ import (
 	"github.com/kyma-project/kyma/components/function-controller/pkg/apis"
 	serverlessv1alpha1 "github.com/kyma-project/kyma/components/function-controller/pkg/apis/serverless/v1alpha1"
 	"github.com/kyma-project/kyma/components/function-controller/pkg/controllers"
-	"github.com/kyma-project/kyma/components/function-controller/pkg/webhook"
 	tektonv1alpha1 "github.com/tektoncd/pipeline/pkg/apis/pipeline/v1alpha1"
 	"k8s.io/apimachinery/pkg/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
@@ -32,6 +31,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
+	"sigs.k8s.io/controller-runtime/pkg/webhook"
+
 	// +kubebuilder:scaffold:imports
 )
 
@@ -68,7 +69,11 @@ func main() {
 	}
 
 	setupLog.Info("Initializing controller manager")
-	mgr, err := manager.New(cfg, manager.Options{})
+	mgr, err := manager.New(cfg, manager.Options{
+		Scheme:             scheme,
+		MetricsBindAddress: metricsAddr,
+		LeaderElection:     enableLeaderElection,
+	})
 	if err != nil {
 		setupLog.Error(err, "Unable to initialize controller manager")
 		os.Exit(1)
@@ -94,15 +99,23 @@ func main() {
 		os.Exit(1)
 	}
 
+	setupLog.Info("setting up webhook server")
+	hookServer := mgr.GetWebhookServer()
+
+	setupLog.Info("registering webhooks to the webhook server")
+	hookServer.Register("/mutating-create-function", &webhook.Admission{Handler: &podAnnotator{}})
+	hookServer.Register("/validating-funtion", &webhook.Admission{Handler: &podValidator{}})
+
+
 	setupLog.Info("Running manager")
 	if err := mgr.Start(ctrl.SetupSignalHandler()); err != nil {
 		setupLog.Error(err, "Unable to run the manager")
 		os.Exit(1)
 	}
 
-	setupLog.Info("Adding webhooks to the manager")
-	if err := (&webhook.FunctionHandler{}).SetupWebhookWithManager(mgr); err != nil {
-		setupLog.Error(err, "Unable to add webhooks to the manager")
-		os.Exit(1)
-	}
+	// setupLog.Info("Adding webhooks to the manager")
+	// if err := (&webhook.FunctionHandler{}).SetupWebhookWithManager(mgr); err != nil {
+	// 	setupLog.Error(err, "Unable to add webhooks to the manager")
+	// 	os.Exit(1)
+	// }
 }
