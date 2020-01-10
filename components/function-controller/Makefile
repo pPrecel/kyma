@@ -71,18 +71,18 @@ deploy: manifests
 
 # Generate manifests e.g. CRD, RBAC etc.
 .PHONY: manifests
-manifests: controller-gen
+manifests: controller-gen-local
 	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 
 # Generate code
 .PHONY: generate
-generate: controller-gen
+generate: controller-gen-local
 	$(CONTROLLER_GEN) object:headerFile=./hack/boilerplate.go.txt paths="./..."
 
 # find or download controller-gen
 # download controller-gen if necessary
-.PHONY: controller-gen
-controller-gen:
+.PHONY: controller-gen-local
+controller-gen-local:
 ifeq (, $(shell which controller-gen))
 	@{ \
 	set -e ;\
