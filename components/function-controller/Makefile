@@ -45,7 +45,7 @@ mod-verify-local:
 # Run tests
 test-local: export KUBEBUILDER_CONTROLPLANE_START_TIMEOUT = 2m
 test-local: export KUBEBUILDER_CONTROLPLANE_STOP_TIMEOUT = 2m
-test-local: generate manifests
+test-local: generate-local manifests
 	GO111MODULE=on go test -v -coverprofile=/tmp/artifacts/cover.out -mod vendor ./...
 	@echo -n "Total coverage: "
 	@go tool cover -func=/tmp/artifacts/cover.out | grep total | awk '{print $$3}'
@@ -75,8 +75,8 @@ manifests: controller-gen-local
 	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 
 # Generate code
-.PHONY: generate
-generate: controller-gen-local
+.PHONY: generate-local
+generate-local: controller-gen-local
 	$(CONTROLLER_GEN) object:headerFile=./hack/boilerplate.go.txt paths="./..."
 
 # find or download controller-gen
