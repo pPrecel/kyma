@@ -24,7 +24,7 @@ else
 GOBIN=$(shell go env GOBIN)
 endif
 
-verify:: mod-verify test 
+verify:: mod-verify-local test
 
 resolve-local:
 	GO111MODULE=on go mod download
@@ -104,5 +104,5 @@ path-to-referenced-charts:
 $(eval $(call buildpack-mount,resolve)) 
 $(eval $(call buildpack-mount,mod-verify))
 $(eval $(call buildpack-mount,controller-gen))
-$(eval $(call buildpack-mount,generate))
+$(eval $(call buildpack-mount,manifests))
 $(eval $(call buildpack-mount,test))
