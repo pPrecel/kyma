@@ -36,15 +36,14 @@ var cfg *rest.Config
 
 func TestMain(m *testing.M) {
 	crdBases := filepath.Join("..", "..", "config", "crd", "bases")
-	webhookFiles := filepath.Join("..", "..", "config", "webhook")
+
 	apiServerFlags := envtest.DefaultKubeAPIServerFlags[0 : len(envtest.DefaultKubeAPIServerFlags)-1]
 	apiServerFlags = append(apiServerFlags, "--admission-control=MutatingAdmissionWebhook")
 	test.FileExists(crdBases)
-	test.FileExists(webhookFiles)
 
 	t := &envtest.Environment{
 		Config:             cfg,
-		CRDDirectoryPaths:  []string{webhookFiles, crdBases},
+		CRDDirectoryPaths:  []string{crdBases},
 		KubeAPIServerFlags: apiServerFlags,
 	}
 	apis.AddToScheme(scheme.Scheme)

@@ -30,7 +30,6 @@ import (
 var c client.Client
 
 const timeout = time.Second * 10
-//const webhookURL = "https://localhost:9876" + "/" + webhookEndpoint
 var webhookURL = fmt.Sprintf("https://localhost:%d/%s", port, webhookEndpoint)
 
 var fnConfig = &corev1.ConfigMap{
@@ -76,7 +75,9 @@ func TestWebHook(t *testing.T) {
 	g.Expect(createCertificates(t)).NotTo(gomega.HaveOccurred())
 
 	// create manager
-	mgr, err := manager.New(cfg, manager.Options{})
+	mgr, err := manager.New(cfg, manager.Options{
+		MetricsBindAddress: "0",
+	})
 	g.Expect(err).NotTo(gomega.HaveOccurred())
 
 	c = mgr.GetClient()
