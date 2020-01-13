@@ -29,7 +29,7 @@ import (
 var c client.Client
 
 const timeout = time.Second * 10
-const webhookURL = "https://localhost:9876/mutating-create-function"
+const webhookURL = "https://localhost:" + string(port) + "/" + webhookEndpoint
 
 var fnConfig = &corev1.ConfigMap{
 	ObjectMeta: metav1.ObjectMeta{
@@ -93,7 +93,6 @@ func TestWebHook(t *testing.T) {
 
 	testInvalidFunc(t)
 	testHandleDefaults(t)
-
 }
 
 func testInvalidFunc(t *testing.T) {

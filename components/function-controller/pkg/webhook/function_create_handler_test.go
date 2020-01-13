@@ -41,7 +41,7 @@ func TestMutation(t *testing.T) {
 	// ensure defaults are set
 	g.Expect(function.Spec).To(gstruct.MatchFields(gstruct.IgnoreExtras, gstruct.Fields{
 		"Size":                gomega.BeEquivalentTo("S"),
-		"Timeout":             gomega.BeEquivalentTo(10),
+		"Timeout":             gomega.BeEquivalentTo(180),
 		"Runtime":             gomega.BeEquivalentTo("nodejs8"),
 		"FunctionContentType": gomega.BeEquivalentTo("plaintext"),
 	}))
@@ -83,5 +83,5 @@ func TestValidation(t *testing.T) {
 			Runtime:             "nodejs8",
 		},
 	}
-	g.Expect(functionCreateHandler.validateFunctionFn(function, rnInfo)).To(gomega.MatchError(`functionContentType should be one of ["plaintetext" "base64"] (got "UnknownFunctionContentType")`))
+	g.Expect(functionCreateHandler.validateFunctionFn(function, rnInfo)).To(gomega.MatchError(`functionContentType should be one of ["plaintext" "base64"] (got "UnknownFunctionContentType")`))
 }

@@ -25,6 +25,9 @@ var (
 	log = logf.Log.WithName("webhook")
 )
 
+const webhookEndpoint = "mutating-create-function"
+
+// +kubebuilder:webhook:path=/mutating-create-function,mutating=true,failurePolicy=fail,groups=serverless.kyma-project.io,resources=functions,verbs=create;update,versions=v1alpha1,name=mfunction.kb.io
 
 var _ inject.Client = &FunctionCreateHandler{}
 
