@@ -13,7 +13,6 @@ require (
 	github.com/kyma-project/rafter v0.0.0-20191209074740-2362d0c0f6ea
 	github.com/machinebox/graphql v0.2.2
 	github.com/matryer/is v1.2.0 // indirect
-	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/testify v1.4.0

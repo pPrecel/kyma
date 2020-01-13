@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httputil"
@@ -29,7 +30,8 @@ import (
 var c client.Client
 
 const timeout = time.Second * 10
-const webhookURL = "https://localhost:" + string(port) + "/" + webhookEndpoint
+//const webhookURL = "https://localhost:9876" + "/" + webhookEndpoint
+var webhookURL = fmt.Sprintf("https://localhost:%d/%s", port, webhookEndpoint)
 
 var fnConfig = &corev1.ConfigMap{
 	ObjectMeta: metav1.ObjectMeta{
@@ -80,7 +82,7 @@ func TestWebHook(t *testing.T) {
 	c = mgr.GetClient()
 
 	// add webhook to manager
-	g.Expect(Add(mgr)).NotTo(gomega.HaveOccurred())
+	Add(mgr)
 
 	// start manager
 	stopMgr, mgrStopped := StartTestManager(mgr, g)
@@ -151,17 +153,17 @@ func testHandleDefaults(t *testing.T) {
 
 	expectedPatches := []jsonpatch.Operation{
 		{
-			Operation: "replace",
+			Operation: "add",
 			Path:      "/spec/functionContentType",
 			Value:     "plaintext",
 		},
 		{
-			Operation: "replace",
+			Operation: "add",
 			Path:      "/spec/size",
 			Value:     "S",
 		},
 		{
-			Operation: "replace",
+			Operation: "add",
 			Path:      "/spec/runtime",
 			Value:     "nodejs8",
 		},
@@ -169,6 +171,11 @@ func testHandleDefaults(t *testing.T) {
 			Operation: "add",
 			Path:      "/spec/timeout",
 			Value:     float64(180),
+		},
+		{
+			Operation:"add",
+			Path:"/status",
+			Value: map[string]interface{}{},
 		},
 	}
 
@@ -300,40 +307,54 @@ func getAdmissionRequest() admissionv1beta1.AdmissionReview {
 // Certificates have been created with `mkcert`
 func createCertificates(t *testing.T) error {
 	var err error
-	var srcFileKey *os.File
-	var srcFileCert *os.File
-	var destFileKey *os.File
-	var destFileCert *os.File
+	var srcCaCrt *os.File
+	var srcTlsCrt *os.File
+	var srcTlsKey *os.File
+	var destCaCrt *os.File
+	var destTlsCrt *os.File
+	var destTlsKey *os.File
 
 	// create directory if not existing yet
 	_ = os.Mkdir("/tmp/cert", os.ModePerm)
 
 	// open src files
-	if srcFileKey, err = os.Open("../../test/certs/localhost+2-key.pem"); err != nil {
+	if srcCaCrt, err = os.Open("../../test/certs/ca.crt"); err != nil {
 		return err
 	}
-	defer srcFileKey.Close()
-	if srcFileCert, err = os.Open("../../test/certs/localhost+2.pem"); err != nil {
+	defer srcCaCrt.Close()
+	if srcTlsCrt, err = os.Open("../../test/certs/tls.crt"); err != nil {
 		return err
 	}
-	defer srcFileCert.Close()
+	defer srcTlsCrt.Close()
+	if srcTlsKey, err = os.Open("../../test/certs/tls.key"); err != nil {
+		return err
+	}
+	defer srcTlsKey.Close()
 
 	// open dest files
-	if destFileKey, err = os.Create("/tmp/cert/key.pem"); err != nil {
+	if destCaCrt, err = os.Create("/tmp/cert/ca.crt"); err != nil {
 		return err
 	}
-	defer destFileKey.Close()
-	if destFileCert, err = os.Create("/tmp/cert/cert.pem"); err != nil {
+	defer destCaCrt.Close()
+	if destTlsCrt, err = os.Create("/tmp/cert/tls.crt"); err != nil {
 		return err
 	}
-	defer destFileCert.Close()
+	defer destTlsCrt.Close()
+	if destTlsKey, err = os.Create("/tmp/cert/tls.key"); err != nil {
+		return err
+	}
+	defer destTlsKey.Close()
 
-	// copy key
-	if _, err := io.Copy(destFileKey, srcFileKey); err != nil {
+	// copy ca.crt
+	if _, err := io.Copy(destCaCrt, srcCaCrt); err != nil {
 		return err
 	}
-	// copy cert
-	if _, err := io.Copy(destFileCert, srcFileCert); err != nil {
+	// copy tls.crt
+	if _, err := io.Copy(destTlsCrt, srcTlsCrt); err != nil {
+		return err
+	}
+	// copy tls.key
+	if _, err := io.Copy(destTlsKey, srcTlsKey); err != nil {
 		return err
 	}
 
