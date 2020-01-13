@@ -82,7 +82,7 @@ func TestWebHook(t *testing.T) {
 	c = mgr.GetClient()
 
 	// add webhook to manager
-	g.Expect(Add(mgr)).NotTo(gomega.HaveOccurred())
+	Add(mgr)
 
 	// start manager
 	stopMgr, mgrStopped := StartTestManager(mgr, g)
