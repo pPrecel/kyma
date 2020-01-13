@@ -62,7 +62,7 @@ removewebhook:
 	-kubectl delete mutatingwebhookconfigurations.admissionregistration.k8s.io function-webhook.serverless.kyma-project.io
 
 undeploy: uninstall removewebhook
-	kustomize build config/default | ko delete  -f -
+	kustomize build config/default | kubectl delete  -f -
 
 # Deploy controller in the configured Kubernetes cluster in ~/.kube/config
 deploy: manifests

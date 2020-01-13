@@ -24,4 +24,5 @@ vendor/
 *.swo
 *~
 
-manager
+
+function-controller
