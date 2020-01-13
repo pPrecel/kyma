@@ -20,12 +20,9 @@ var (
 )
 
 // Add adds itself to the manager
-func Add(mgr manager.Manager) error {
-
-	logSrv.Info("setting up webhook server")
+func Add(mgr manager.Manager) {
 	srv := mgr.GetWebhookServer()
 	srv.CertDir = certDir
 	srv.Port = port
 	srv.Register("/"+webhookEndpoint, &webhook.Admission{Handler: &FunctionCreateHandler{}})
-	return nil
 }
