@@ -67,7 +67,7 @@ knative::install_serving(){
     # there's no guarantee that serving installs like this if the version is other than v0.8.0, so if
     # you change KNATIVE_SERVING_VERSION variable make sure the installation procedure didn't change
     kubectl apply --selector knative.dev/crd-install=true \
-    --filename "shttps://github.com/knative/serving/releases/download/${KNATIVE_SERVING_VERSION}/serving.yaml" \
+    --filename "https://github.com/knative/serving/releases/download/${KNATIVE_SERVING_VERSION}/serving.yaml" \
     --filename "https://github.com/knative/eventing/releases/download/${KNATIVE_SERVING_VERSION}/release.yaml" \
     --filename "https://github.com/knative/serving/releases/download/${KNATIVE_SERVING_VERSION}/monitoring.yaml" --wait=true || true
 
