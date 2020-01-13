@@ -30,6 +30,7 @@ import (
 var c client.Client
 
 const timeout = time.Second * 10
+
 var webhookURL = fmt.Sprintf("https://localhost:%d/%s", port, webhookEndpoint)
 
 var fnConfig = &corev1.ConfigMap{
@@ -174,9 +175,9 @@ func testHandleDefaults(t *testing.T) {
 			Value:     float64(180),
 		},
 		{
-			Operation:"add",
-			Path:"/status",
-			Value: map[string]interface{}{},
+			Operation: "add",
+			Path:      "/status",
+			Value:     map[string]interface{}{},
 		},
 	}
 

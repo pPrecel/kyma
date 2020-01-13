@@ -6,8 +6,7 @@ APP_PATH = components/$(APP_NAME)
 BUILDPACK = eu.gcr.io/kyma-project/test-infra/buildpack-golang-kubebuilder2:v20190823-24e14d1
 SCRIPTS_DIR = $(realpath $(shell pwd)/../..)/common/makefiles
 
-
-override ENTRYPOINT := ./main.go
+override VERIFY_IGNORE := /vendor\|/automock\|/pkg/apis/serverless/v1alpha1/zz_generated.deepcopy.go
 
 include $(SCRIPTS_DIR)/generic-make-go.mk
 
