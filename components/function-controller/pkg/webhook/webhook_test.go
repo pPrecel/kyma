@@ -42,7 +42,7 @@ var fnConfig = &corev1.ConfigMap{
 		"dockerRegistry":     "test",
 		"serviceAccountName": "build-bot",
 		"defaults": `{
-			"size": "S",
+			"size": "L",
 			"runtime": "nodejs8",
 			"timeOut": 180,
 			"funcContentType": "plaintext",
@@ -147,7 +147,6 @@ func getInsecureClient() *http.Client {
 }
 
 func testHandleDefaults(t *testing.T) {
-
 	g := gomega.NewGomegaWithT(t)
 
 	// these are the expected patches for an empty function
@@ -211,7 +210,8 @@ func testHandleDefaults(t *testing.T) {
 						"creationTimestamp": "2019-06-07T12:33:39Z"
 					},
 					"spec": {
-						"function": "foo()"
+						"function": "foo()",
+					    "size": "L"
 					}
 				}`),
 			},
@@ -256,10 +256,14 @@ func testHandleDefaults(t *testing.T) {
 	}
 
 	// check that each received patch matches at least one expected patch
-	for _, actualPatch := range responsePatch {
-		g.Expect(expectedPatches).To(gomega.ContainElement(gomega.BeEquivalentTo(actualPatch)))
+	for _, expectedPatch := range expectedPatches {
+		g.Expect(responsePatch).To(gomega.ContainElement(gomega.BeEquivalentTo(expectedPatch)))
 	}
 
+	// check that each received patch matches at least one expected patch
+	// for _, actualPatch := range responsePatch {
+	// 	g.Expect(expectedPatches).To(gomega.ContainElement(gomega.BeEquivalentTo(actualPatch)))
+	// }
 }
 
 // Create an admission request
