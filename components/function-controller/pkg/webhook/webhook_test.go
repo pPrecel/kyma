@@ -42,7 +42,7 @@ var fnConfig = &corev1.ConfigMap{
 		"dockerRegistry":     "test",
 		"serviceAccountName": "build-bot",
 		"defaults": `{
-			"size": "L",
+			"size": "S",
 			"runtime": "nodejs8",
 			"timeOut": 180,
 			"funcContentType": "plaintext",
@@ -210,8 +210,7 @@ func testHandleDefaults(t *testing.T) {
 						"creationTimestamp": "2019-06-07T12:33:39Z"
 					},
 					"spec": {
-						"function": "foo()",
-					    "size": "L"
+						"function": "foo()"
 					}
 				}`),
 			},
