@@ -319,8 +319,11 @@ func createCertificates(t *testing.T) error {
 	var destTlsCrt *os.File
 	var destTlsKey *os.File
 
+	dir := "/tmp/k8s-webhook-server/serving-certs"
+
 	// create directory if not existing yet
-	_ = os.Mkdir("/tmp/cert", os.ModePerm)
+	_ = os.Mkdir("/tmp/k8s-webhook-server", os.ModePerm)
+	_ = os.Mkdir(dir, os.ModePerm)
 
 	// open src files
 	if srcCaCrt, err = os.Open("../../test/certs/ca.crt"); err != nil {
@@ -337,15 +340,15 @@ func createCertificates(t *testing.T) error {
 	defer srcTlsKey.Close()
 
 	// open dest files
-	if destCaCrt, err = os.Create("/tmp/cert/ca.crt"); err != nil {
+	if destCaCrt, err = os.Create(fmt.Sprintf("%s/%s", dir, "ca.crt")); err != nil {
 		return err
 	}
 	defer destCaCrt.Close()
-	if destTlsCrt, err = os.Create("/tmp/cert/tls.crt"); err != nil {
+	if destTlsCrt, err = os.Create(fmt.Sprintf("%s/%s", dir, "tls.crt")); err != nil {
 		return err
 	}
 	defer destTlsCrt.Close()
-	if destTlsKey, err = os.Create("/tmp/cert/tls.key"); err != nil {
+	if destTlsKey, err = os.Create(fmt.Sprintf("%s/%s", dir, "tls.key")); err != nil {
 		return err
 	}
 	defer destTlsKey.Close()

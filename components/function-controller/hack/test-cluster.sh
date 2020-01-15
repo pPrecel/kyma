@@ -63,6 +63,11 @@ tekton::install(){
     kubectl apply -f "https://storage.googleapis.com/tekton-releases/pipeline/previous/${TEKTON_VERION}/release.yaml" --wait=true
 }
 
+cert-manager::install(){
+    kubectl create namespace cert-manager
+    kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml
+}
+
 knative::install_serving(){
     # there's no guarantee that serving installs like this if the version is other than v0.8.0, so if
     # you change KNATIVE_SERVING_VERSION variable make sure the installation procedure didn't change
@@ -86,6 +91,8 @@ main(){
     tekton::install
 
     knative::install_serving
+
+    cert-manager::install
 }
 
 main

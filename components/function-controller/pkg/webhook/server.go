@@ -11,7 +11,7 @@ import (
 // +kubebuilder:rbac:groups="",resources=services,verbs=get;list;watch;create;update;patch;delete
 
 const (
-	certDir = "/tmp/cert"
+	certDir = "/tmp/k8s-webhook-server/serving-certs"
 	port    = 9876
 )
 
